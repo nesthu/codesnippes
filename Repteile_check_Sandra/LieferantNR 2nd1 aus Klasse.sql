@@ -1,7 +1,7 @@
 --Liefrantenmaterialnummer  PARTNUMMER_LIEFARTNR_1 aus Klassifizierung für alle Standorte holen zu allen R Parts 1629 DRS
 select distinct
     k.OBJEKT,
-    k.PARTNUMMER_LIEFARTNR_1,
+    k.PARTNUMMer,
     r.WERKSSPEZ_MATERIALSTATUS,
     r.LOCATION
 from MM_KLASSE_MAT_ALLE_WERKE k
