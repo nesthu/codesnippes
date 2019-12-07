@@ -1,9 +1,9 @@
 -- ohne distinct 119430  auch mit Distinct 119430 ??
 select
 MATERIAL,
-LIEFERANTMATERIAL,
 WERKSSPEZ_MATERIALSTATUS,
-LOCATION
+LOCATION,
+listagg(LIEFERANTMATERIAL, ', ') within group( order by LIEFERANTMATERIAL ) AS NOV_SEARCH
 from (
 --Liefrantenmaterialnummer OEM Ursprung (Mehrfach) aus Klassifizierung für alle Standorte holen zu allen R Parts 1629 DRS
 select distinct
@@ -105,3 +105,7 @@ where   LENGTH(k.PARTNUMMER_LIEFARTNR_2) > 3 -- Ausblenden Nullwerte und kleiner
         and k.PARTNUMMER_LIEFARTNR_2 not in ('no OEM p/n','nicht bekannt','N.A.','OHNE') -- Ausblenden nicht realer Nummern
         --and r.WERKSSPEZ_MATERIALSTATUS = 'R'; -- Anzeige nur markierte Repteile
 )
+group by
+    MATERIAL,
+WERKSSPEZ_MATERIALSTATUS,
+LOCATION
