@@ -5,7 +5,7 @@ listagg(MATERIAL, ', ') within group( order by MATERIAL ) AS NOV_SEARCH
 from (
 --Liefrantenmaterialnummer OEM Ursprung (Mehrfach) aus Klassifizierung für alle Standorte holen zu allen R Parts 1629 DRS
 select distinct
-    k.OBJEKT as MATERIAL,
+    k.WERK ||'_'||k.OBJEKT as MATERIAL,
     trim(k.OEM_PN_URSPRUNG) as LIEFERANTMATERIAL
 from MM_KLASSE_MAT_ALLE_WERKE k
     inner JOIN (
@@ -23,7 +23,7 @@ union
 
 --Liefrantenmaterialnummer aus Infosatz  für alle Standorte holen zu allen R Parts 1629 DRS
 select distinct
-    i.MATERIAL,
+    i.STANDORT ||'_'||i.MATERIAL,
     trim(i.LIEFERANTENMATERIALNR) as LIEFERANTENMATERIALNR
 from MM_INFOSATZ_ALLE_WERKE i
     inner JOIN (
@@ -41,7 +41,7 @@ union
 
 --Liefrantenmaterialnummer OEM aktuell aus Klassifizierung für alle Standorte holen zu allen R Parts 1629 DRS
 select distinct
-    k.OBJEKT,
+    k.WERK ||'_'||k.OBJEKT,
     trim(k.OEM_PN_AKTUELL)
 from MM_KLASSE_MAT_ALLE_WERKE k
     inner JOIN (
@@ -60,7 +60,7 @@ union
 
 --Liefrantenmaterialnummer  PARTNUMMER_LIEFARTNR_1 aus Klassifizierung für alle Standorte holen zu allen R Parts 1629 DRS
 select distinct
-    k.OBJEKT,
+    k.WERK ||'_'||k.OBJEKT,
     trim(k.PARTNUMMER_LIEFARTNR_1) as PARTNUMMER_LIEFARTNR_1
 from MM_KLASSE_MAT_ALLE_WERKE k
     inner JOIN (
@@ -79,7 +79,7 @@ union
 
 --Liefrantenmaterialnummer PARTNUMMER_LIEFARTNR_2 aus Klassifizierung  für alle Standorte holen zu allen R Parts 1629 DRS
 select distinct
-    k.OBJEKT,
+    k.WERK ||'_'||k.OBJEKT,
     trim(k.PARTNUMMER_LIEFARTNR_2) as PARTNUMMER_LIEFARTNR_2
 from MM_KLASSE_MAT_ALLE_WERKE k
     inner JOIN (
