@@ -28,7 +28,7 @@ union
 --Liefrantenmaterialnummer aus Infosatz  für alle Standorte holen zu allen R Parts 1629 DRS
 select distinct
     i.MATERIAL,
-    i.LIEFERANTENMATERIALNR,
+    trim(i.LIEFERANTENMATERIALNR) as LIEFERANTENMATERIALNR,
     r.WERKSSPEZ_MATERIALSTATUS,
     r.LOCATION
 from MM_INFOSATZ_ALLE_WERKE i
@@ -109,3 +109,4 @@ group by
     LIEFERANTMATERIAL,
 WERKSSPEZ_MATERIALSTATUS,
 LOCATION
+;
