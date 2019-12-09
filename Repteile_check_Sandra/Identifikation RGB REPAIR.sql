@@ -2,12 +2,20 @@
 select
 LOCATION,
 Material,
+MATERIALKURZTEXTDE,
+MATERIALKURZTEXTZ1,
+DISPONENT,
+DISPOMERKMAL,
 WERKSSPEZ_MATERIALSTATUS,
 RMaterial
 from (
       select
       'RBG' as LOCATION,
       s.MATERIAL,
+      s.MATERIALKURZTEXTDE,
+      s.MATERIALKURZTEXTZ1,
+      s.DISPONENT,
+      s.DISPOMERKMAL,
       s.WERKSSPEZ_MATERIALSTATUS,
       ma.RMATERIAL
       from MM_STAMMDATEN_RBG s
@@ -27,11 +35,19 @@ union
      select
      'DRS' as LOCATION,
      Material,
+     MATERIALKURZTEXTDE,
+     MATERIALKURZTEXTZ1,
+     DISPONENT,
+     DISPOMERKMAL,
      WERKSSPEZ_MATERIALSTATUS,
      RMaterial
      from (
            select
            s.MATERIAL,
+           s.MATERIALKURZTEXTDE,
+           s.MATERIALKURZTEXTZ1,
+           s.DISPONENT,
+           s.DISPOMERKMAL,
            s.WERKSSPEZ_MATERIALSTATUS,
            ma.RMATERIAL
            from MM_STAMMDATEN_DRS s
@@ -50,11 +66,19 @@ union
     select
     'KLM' as LOCATION,
     Material,
+    MATERIALKURZTEXTDE,
+    MATERIALKURZTEXTZ1,
+    DISPONENT,
+    DISPOMERKMAL,
     WERKSSPEZ_MATERIALSTATUS,
     RMaterial
     from (
           select
           s.MATERIAL,
+          s.MATERIALKURZTEXTDE,
+          s.MATERIALKURZTEXTZ1,
+          s.DISPONENT,
+          s.DISPOMERKMAL,
           s.WERKSSPEZ_MATERIALSTATUS,
           ma.RMATERIAL
           from MM_STAMMDATEN_KLM s
@@ -73,11 +97,19 @@ union
       select
       'VIH' as LOCATION,
       Material,
+      MATERIALKURZTEXTDE,
+      MATERIALKURZTEXTZ1,
+      DISPONENT,
+      DISPOMERKMAL,
       WERKSSPEZ_MATERIALSTATUS,
       RMaterial
       from (
             select
             s.MATERIAL,
+            s.MATERIALKURZTEXTDE,
+            s.MATERIALKURZTEXTZ1,
+            s.DISPONENT,
+            s.DISPOMERKMAL,
             s.WERKSSPEZ_MATERIALSTATUS,
             ma.RMATERIAL
             from MM_STAMMDATEN_VIH s
