@@ -1,6 +1,18 @@
+select
+st.LOCATION,
+st.MATERIAL,
+st.MATERIAL_DESCRIPTION_DE,
+st.MATERIAL_DESCRIPTION_Z1,
+st.MRP_CONTROLLER,
+st.MRP_TYPE,
+st.PLANT_SPECIFIC_STATUS,
+mv."12M_CONSUMPTION",
+mv.CONSUMPTION_EUR_12M,
+st.LINKED_REPAIR_MATERIAL
+from (
 --RBG
 select
-LOCATION,
+LOCATION as "LOCATION",
 MATERIAL as MATERIAL,
 MATERIALKURZTEXTDE as MATERIAL_DESCRIPTION_DE,
 MATERIALKURZTEXTZ1 as MATERIAL_DESCRIPTION_Z1,
@@ -122,4 +134,8 @@ union
                         on ma.ALLMATERIAL LIKE ('%' || s.MATERIAL || '%')
             where      "LÖSCHKENNZEICHEN_WK" is null and WERKSSPEZ_MATERIALSTATUS is null
                     or "LÖSCHKENNZEICHEN_WK" is null  and WERKSSPEZ_MATERIALSTATUS <>'R'
-            ) where RMaterial is not null
+)
+where RMaterial is not null
+) st
+left outer join MM_MATERIAL_VIEW_ALL_EN mv on mv.MATERIAL = st.MATERIAL and st."LOCATION" = mv.LOCATION
+order by mv.CONSUMPTION_EUR_12M DESC
