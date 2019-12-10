@@ -1,11 +1,13 @@
--- ohne distinct 119430  auch mit Distinct 119430 ??
+-- HLP_MATERIAL_ZU_PN_SEARCH
 select
+"LOCATION",
 MATERIAL,
-listagg(LIEFERANTMATERIAL, ', ') within group( order by LIEFERANTMATERIAL ) AS NOV_SEARCH
+listagg(LIEFERANTMATERIAL, ', ') within group( order by LIEFERANTMATERIAL ) AS LINKED_PN
 from (
---Liefrantenmaterialnummer OEM Ursprung (Mehrfach) aus Klassifizierung für alle Standorte holen zu allen R Parts 1629 DRS
+--Liefrantenmaterialnummer OEM Ursprung (Mehrfach) aus Klassifizierung für alle Standorte holen
 select distinct
-    k.WERK ||'_'||k.OBJEKT as MATERIAL,
+    k.WERK as "LOCATION",
+    k.OBJEKT as MATERIAL,
     trim(k.OEM_PN_URSPRUNG) as LIEFERANTMATERIAL
 from MM_KLASSE_MAT_ALLE_WERKE k
     inner JOIN (
@@ -18,12 +20,13 @@ from MM_KLASSE_MAT_ALLE_WERKE k
                     on r.Material = k.OBJEKT and r.LOCATION = k.WERK
 where   LENGTH(trim(k.OEM_PN_URSPRUNG)) > 3 -- Ausblenden Nullwerte und kleiner 999
         and trim(k.OEM_PN_URSPRUNG) not in ('no OEM p/n','nicht bekannt','N.A.','OHNE','KEINE') -- Ausblenden nicht realer Nummern
-        --and r.WERKSSPEZ_MATERIALSTATUS = 'R'; -- Anzeige nur markierte Repteile
+
 union
 
---Liefrantenmaterialnummer aus Infosatz  für alle Standorte holen zu allen R Parts 1629 DRS
+--Liefrantenmaterialnummer aus Infosatz  für alle Standorte holen
 select distinct
-    i.STANDORT ||'_'||i.MATERIAL,
+    i.STANDORT,
+    i.MATERIAL,
     trim(i.LIEFERANTENMATERIALNR) as LIEFERANTENMATERIALNR
 from MM_INFOSATZ_ALLE_WERKE i
     inner JOIN (
@@ -41,7 +44,8 @@ union
 
 --Liefrantenmaterialnummer OEM aktuell aus Klassifizierung für alle Standorte holen zu allen R Parts 1629 DRS
 select distinct
-    k.WERK ||'_'||k.OBJEKT,
+    k.WERK,
+    k.OBJEKT,
     trim(k.OEM_PN_AKTUELL)
 from MM_KLASSE_MAT_ALLE_WERKE k
     inner JOIN (
@@ -60,7 +64,8 @@ union
 
 --Liefrantenmaterialnummer  PARTNUMMER_LIEFARTNR_1 aus Klassifizierung für alle Standorte holen zu allen R Parts 1629 DRS
 select distinct
-    k.WERK ||'_'||k.OBJEKT,
+    k.WERK,
+    k.OBJEKT,
     trim(k.PARTNUMMER_LIEFARTNR_1) as PARTNUMMER_LIEFARTNR_1
 from MM_KLASSE_MAT_ALLE_WERKE k
     inner JOIN (
@@ -79,7 +84,8 @@ union
 
 --Liefrantenmaterialnummer PARTNUMMER_LIEFARTNR_2 aus Klassifizierung  für alle Standorte holen zu allen R Parts 1629 DRS
 select distinct
-    k.WERK ||'_'||k.OBJEKT,
+    k.WERK,
+    k.OBJEKT,
     trim(k.PARTNUMMER_LIEFARTNR_2) as PARTNUMMER_LIEFARTNR_2
 from MM_KLASSE_MAT_ALLE_WERKE k
     inner JOIN (
@@ -95,5 +101,5 @@ where   LENGTH(trim(k.PARTNUMMER_LIEFARTNR_2)) > 3 -- Ausblenden Nullwerte und k
         --and r.WERKSSPEZ_MATERIALSTATUS = 'R'; -- Anzeige nur markierte Repteile
 )
 group by
-    MATERIAL
+    MATERIAL, "LOCATION"
 ;
