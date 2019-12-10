@@ -95,5 +95,5 @@ where   LENGTH(trim(k.PARTNUMMER_LIEFARTNR_2)) > 3 -- Ausblenden Nullwerte und k
         --and r.WERKSSPEZ_MATERIALSTATUS = 'R'; -- Anzeige nur markierte Repteile
 )
 group by
-    LIEFERANTMATERIAL
+    MATERIAL
 ;
