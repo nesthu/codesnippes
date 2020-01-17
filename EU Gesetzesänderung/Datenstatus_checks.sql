@@ -3,7 +3,7 @@
 select MAX(LAST_UPDATE)
 from MM_BESTAND_DRS;
 
--- check ob Consignment MB54 Daten eingelaufen sind
+-- check ob Consignment MB54 Daten eingelaufen sind am 1.1. sollte hier der 31.12. stehen
 select max("DATUM")
 from MM_CONSIGNMENT_VALUE_DRS;
 
@@ -23,4 +23,4 @@ select MAX(LAST_UPDATE)
 from BESTAND_K_SWITCH_CHECK_TABL;
 
 select MAX(LAST_UPDATE)
-from MM_BESTAND_K_DRS_311219_TABL
+from MM_BESTAND_K_DRS_311219_TABL ;
