@@ -1,4 +1,6 @@
+-- MM_LAGERLIST_USAGE_QUICKF
 select
+    'DRS' as LOCATION,
     h.MATERIAL,
     h.BATCH_NUMBER,
     h.GR_NUMBER,
