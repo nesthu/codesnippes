@@ -14,7 +14,8 @@ case
     when m.mmenge > NB.konsibestand - NB.NeuerBestand and NB.vendor_number not in ('53822') then 'Umbuchung prüfen!'
     else
     'alles ok'
-    end as Umbuchung_ALARM
+    end as Umbuchung_ALARM,
+BW.STOCK_VALUE_EUR_PER_UNIT *  (NB.konsibestand - NB.NeuerBestand) as "Umbuchungswert in EUR"
 from (                      --  zu allen Materialien noch den neuen Bestand hinzufügen als NEUBESTAND
         select
         st.material,
@@ -53,4 +54,12 @@ from (                      --  zu allen Materialien noch den neuen Bestand hinz
                                 ) c
                             group by c.materialnummer ) m on m.Material = NB.material
 left outer join MM_LIEFERANT_DRS l on l.KONTONUMMER_KREDITOR = NB.vendor_number
+left outer join (
+                    -- Bestandswert je Unit runter gerechnet aus letztem Konsibestandswert
+                    select
+                    material,
+                    round(stock_value_eur / consignment_stock,2) as STOCK_VALUE_EUR_PER_UNIT
+                    from MM_CONSIGNMENT_VALUE_ALL_EN
+                    where "DATE" = (select max("DATE") from MM_CONSIGNMENT_VALUE_ALL_EN where location = 'DRS')
+                    ) BW on bw.material = nb.material
 where NeuerBestand > 0          -- Filter nur Teile Mit neuem Bestand
