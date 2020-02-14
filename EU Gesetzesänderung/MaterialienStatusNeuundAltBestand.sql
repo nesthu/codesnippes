@@ -2,6 +2,7 @@
 select
 NB.material,
 NB.vendor_number,
+l.NAME1,
 NB.consignment_stock_3112,
 NB.consumption_since_010120,
 NB.switch_check,
@@ -10,7 +11,7 @@ NB.konsibestand,
 NB.NeuerBestand,
 m.mmenge as MAX_WITHDRAWAL_PER_DAY,
 case
-    when m.mmenge > NB.konsibestand - NB.NeuerBestand then 'Umbuchung prüfen!'
+    when m.mmenge > NB.konsibestand - NB.NeuerBestand and NB.vendor_number not in ('53822') then 'Umbuchung prüfen!'
     else
     'alles ok'
     end as Umbuchung_ALARM
@@ -50,5 +51,6 @@ from (                      --  zu allen Materialien noch den neuen Bestand hinz
                                 where soll_haben_kennzeichen = 'H'
                                 group by materialnummer,buchungsdatum_beleg
                                 ) c
-                        group by c.materialnummer ) m on m.Material = NB.material
+                            group by c.materialnummer ) m on m.Material = NB.material
+left outer join MM_LIEFERANT_DRS l on l.KONTONUMMER_KREDITOR = NB.vendor_number
 where NeuerBestand > 0          -- Filter nur Teile Mit neuem Bestand
