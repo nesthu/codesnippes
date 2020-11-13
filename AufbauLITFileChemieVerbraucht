@@ -4,6 +4,7 @@ s.MATERIALKURZTEXTDE,
 v."MONTH_YEAR" as "Datum",
 v."CHANGE_IN_STOCK",
 s.einheit_meldebestand,
+RTRIM(REGEXP_SUBSTR(s.MATERIALKURZTEXTDE, '[0-9]([0-9]|\.|,|[:space:])+[[:space:]]?((k|m)?g|(m|d|c)?l|(c|d)?m)[0-9]?([?=(_|[:space:])]|$)', 1, 1, 'i'), '_ )') AS UNIT_SIZE,
 k.WERT_EUR,
 k.MENGE_ME
 from MM_ZHMDMAVL_DRS v
