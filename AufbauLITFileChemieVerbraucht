@@ -19,3 +19,4 @@ left outer join (
         group by c.MATERIALNUMMER, TRUNC(TO_DATE(c.BUCHUNGSDATUM),'MM')
 )k on k.materialnummer = v.materialnr and v.month_year = k.matchdate
 where v.MONTH_YEAR > (trunc(sysdate, 'MM'))- interval '25' month and v.MONTH_YEAR <= (trunc(sysdate, 'MM')) and s.mart in ('CFP')
+order by v.month_year DESC
