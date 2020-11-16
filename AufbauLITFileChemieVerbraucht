@@ -4,7 +4,8 @@ s.MATERIALKURZTEXTDE,
 v."MONTH_YEAR" as "Datum",
 v."CHANGE_IN_STOCK",
 s.einheit_meldebestand,
-RTRIM(REGEXP_SUBSTR(s.MATERIALKURZTEXTDE, '[0-9]([0-9]|\.|,|[:space:])+[[:space:]]?((k|m)?g|(m|d|c)?l|(c|d)?m)[0-9]?([?=(_|[:space:])]|$)', 1, 1, 'i'), '_ )') AS UNIT_SIZE,
+--RTRIM(REGEXP_SUBSTR(s.MATERIALKURZTEXTDE, '[0-9]([0-9](|\.|,|)?([:space:])+[[:space:]])?((k|m)?g|(m|d|c)?l|(c|d)?m)[0-9]?([?=(_|[:space:])]|$)', 1, 1, 'i'), '_ )') AS UNIT_SIZE,
+RTRIM(REGEXP_SUBSTR(s.MATERIALKURZTEXTDE, '[_][0-9]{1,4}[.|,]?([0-9]{1,4})?(K|L|m)', 1, 1, 'i'), '_ )') AS UNIT_SIZE,
 k.WERT_EUR,
 k.MENGE_ME
 from MM_ZHMDMAVL_DRS v
@@ -19,5 +20,5 @@ left outer join (
         where c.BUCHUNGSDATUM > (trunc(sysdate, 'MM'))- interval '25' month 
         group by c.MATERIALNUMMER, TRUNC(TO_DATE(c.BUCHUNGSDATUM),'MM')
 )k on k.materialnummer = v.materialnr and v.month_year = k.matchdate
-where v.MONTH_YEAR > (trunc(sysdate, 'MM'))- interval '25' month and v.MONTH_YEAR <= (trunc(sysdate, 'MM')) and s.mart in ('CFP')
+where v.MONTH_YEAR > (trunc(sysdate, 'MM'))- interval '25' month and v.MONTH_YEAR <= (trunc(sysdate, 'MM')) and s.mart in ('CFP') 
 order by v.month_year DESC
