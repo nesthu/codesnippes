@@ -5,7 +5,9 @@ v."MONTH_YEAR" as "Datum",
 v."CHANGE_IN_STOCK",
 s.einheit_meldebestand,
 --RTRIM(REGEXP_SUBSTR(s.MATERIALKURZTEXTDE, '[0-9]([0-9](|\.|,|)?([:space:])+[[:space:]])?((k|m)?g|(m|d|c)?l|(c|d)?m)[0-9]?([?=(_|[:space:])]|$)', 1, 1, 'i'), '_ )') AS UNIT_SIZE,
-RTRIM(REGEXP_SUBSTR(s.MATERIALKURZTEXTDE, '[_][0-9]{1,4}[.|,]?([0-9]{1,4})?(K|L|m)', 1, 1, 'i'), '_ )') AS UNIT_SIZE,
+--regexp_replace(RTRIM(REGEXP_SUBSTR(s.MATERIALKURZTEXTDE, '[_][0-9]{1,4}[.|,]?([0-9]{1,4})?(K|L|m)', 1, 1, 'i'), '_ )'), '_','') AS UNIT_SIZE,
+SUBSTR(RTRIM(REGEXP_SUBSTR(s.MATERIALKURZTEXTDE, '[0-9]{1,4}[.|,]?([0-9]{1,4})?(K|L|m)', 1, 1, 'i'), '_ )'),0,length(RTRIM(REGEXP_SUBSTR(s.MATERIALKURZTEXTDE, '[0-9]{1,4}[.|,]?([0-9]{1,4})?(K|L|m)', 1, 1, 'i'), '_ )'))-1) AS UNIT_SIZE,
+--RTRIM(REGEXP_SUBSTR(s.MATERIALKURZTEXTDE, '[0-9]{1,4}[.|,]?([0-9]{1,4})?(K|L|m)', 1, 1, 'i'), '_ )') AS UNIT_SIZE,
 k.WERT_EUR,
 k.MENGE_ME
 from MM_ZHMDMAVL_DRS v
