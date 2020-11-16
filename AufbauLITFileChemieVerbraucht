@@ -1,15 +1,12 @@
 select 
-v."MATERIALNR",
-s.MATERIALKURZTEXTDE,
+v."MATERIALNR" as Material,
+s.MATERIALKURZTEXTDE as Description,
 v."MONTH_YEAR" as "Datum",
-v."CHANGE_IN_STOCK",
-s.einheit_meldebestand,
---TO_CHAR(SUBSTR(RTRIM(REGEXP_SUBSTR(s.MATERIALKURZTEXTDE, '[0-9]{1,4}[.|,]?([0-9]{1,4})?(K|L|m)', 1, 1, 'i'), '_ )'),0,length(RTRIM(REGEXP_SUBSTR(s.MATERIALKURZTEXTDE, '[0-9]{1,4}[.|,]?([0-9]{1,4})?(K|L|m)', 1, 1, 'i'), '_ )'))-1),'999999D999','NLS_NUMERIC_CHARACTERS = '',.''') as Test,
+v."CHANGE_IN_STOCK" as consumption,
+s.einheit_meldebestand as Unit,
 TO_NUMBER(REPLACE(SUBSTR(RTRIM(REGEXP_SUBSTR(s.MATERIALKURZTEXTDE, '[0-9]{1,4}[.|,]?([0-9]{1,4})?(K|L|m)', 1, 1, 'i'), '_ )'),0,length(RTRIM(REGEXP_SUBSTR(s.MATERIALKURZTEXTDE, '[0-9]{1,4}[.|,]?([0-9]{1,4})?(K|L|m)', 1, 1, 'i'), '_ )'))-1), '.', ',')) AS UNIT_SIZE,
---RTRIM(REGEXP_SUBSTR(s.MATERIALKURZTEXTDE, '[0-9]{1,4}[.|,]?([0-9]{1,4})?(K|L|m)', 1, 1, 'i'), '_') as Test,
-k.WERT_EUR,
-k.MENGE_ME,
-k.MENGE_ME/TO_NUMBER(REPLACE(SUBSTR(RTRIM(REGEXP_SUBSTR(s.MATERIALKURZTEXTDE, '[0-9]{1,4}[.|,]?([0-9]{1,4})?(K|L|m)', 1, 1, 'i'), '_ )'),0,length(RTRIM(REGEXP_SUBSTR(s.MATERIALKURZTEXTDE, '[0-9]{1,4}[.|,]?([0-9]{1,4})?(K|L|m)', 1, 1, 'i'), '_ )'))-1), '.', ',')) as Unit_Usage
+k.WERT_EUR as Value_EUR,
+v."CHANGE_IN_STOCK"/TO_NUMBER(REPLACE(SUBSTR(RTRIM(REGEXP_SUBSTR(s.MATERIALKURZTEXTDE, '[0-9]{1,4}[.|,]?([0-9]{1,4})?(K|L|m)', 1, 1, 'i'), '_ )'),0,length(RTRIM(REGEXP_SUBSTR(s.MATERIALKURZTEXTDE, '[0-9]{1,4}[.|,]?([0-9]{1,4})?(K|L|m)', 1, 1, 'i'), '_ )'))-1), '.', ',')) as Unit_Usage
 from MM_ZHMDMAVL_DRS v
 left outer join MM_STAMMDATEN_DRS s on s.material = v.materialnr
 left outer join (
