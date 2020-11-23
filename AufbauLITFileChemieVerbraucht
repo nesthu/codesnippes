@@ -4,7 +4,6 @@ s.MATERIALKURZTEXTDE as Description,
 v."MONTH_YEAR" as "Datum",
 v."CHANGE_IN_STOCK" as consumption,
 s.einheit_meldebestand as Unit,
-replace(s.MATERIALKURZTEXTDE,'.',',') as KOMMA,
 --REGEXP_SUBSTR(s.MATERIALKURZTEXTDE, '(_)[0-9]{1,4}[.|,]?([0-9]{1,4})?(K|L|m|k)') as Test,  --Regexp String check
 TO_NUMBER(Replace(REPLACE(SUBSTR(RTRIM(REGEXP_SUBSTR(s.MATERIALKURZTEXTDE, '(_)[0-9]{1,4}[.|,]?([0-9]{1,4})?(K|L|m|k)', 1, 1, 'i'), '_ )'),0,length(RTRIM(REGEXP_SUBSTR(s.MATERIALKURZTEXTDE, '(_)[0-9]{1,4}[.|,]?([0-9]{1,4})?(K|L|m|k)', 1, 1, 'i'), '_ )'))-1), '.', ','),'_','')) AS UNIT_SIZE,
 k.WERT_EUR as Value_EUR,
