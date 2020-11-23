@@ -6,7 +6,8 @@ v."CHANGE_IN_STOCK" as consumption,
 s.einheit_meldebestand as Unit,
 TO_NUMBER(REPLACE(SUBSTR(RTRIM(REGEXP_SUBSTR(s.MATERIALKURZTEXTDE, '[0-9]{1,4}[.|,]?([0-9]{1,4})?(K|L|m)', 1, 1, 'i'), '_ )'),0,length(RTRIM(REGEXP_SUBSTR(s.MATERIALKURZTEXTDE, '[0-9]{1,4}[.|,]?([0-9]{1,4})?(K|L|m)', 1, 1, 'i'), '_ )'))-1), '.', ',')) AS UNIT_SIZE,
 k.WERT_EUR as Value_EUR,
-v."CHANGE_IN_STOCK"/TO_NUMBER(REPLACE(SUBSTR(RTRIM(REGEXP_SUBSTR(s.MATERIALKURZTEXTDE, '[0-9]{1,4}[.|,]?([0-9]{1,4})?(K|L|m)', 1, 1, 'i'), '_ )'),0,length(RTRIM(REGEXP_SUBSTR(s.MATERIALKURZTEXTDE, '[0-9]{1,4}[.|,]?([0-9]{1,4})?(K|L|m)', 1, 1, 'i'), '_ )'))-1), '.', ',')) as Unit_Usage
+v."CHANGE_IN_STOCK"/TO_NUMBER(REPLACE(SUBSTR(RTRIM(REGEXP_SUBSTR(s.MATERIALKURZTEXTDE, '[0-9]{1,4}[.|,]?([0-9]{1,4})?(K|L|m)', 1, 1, 'i'), '_ )'),0,length(RTRIM(REGEXP_SUBSTR(s.MATERIALKURZTEXTDE, '[0-9]{1,4}[.|,]?([0-9]{1,4})?(K|L|m)', 1, 1, 'i'), '_ )'))-1), '.', ',')) as Unit_Usage,
+s.mart
 from MM_ZHMDMAVL_DRS v
 left outer join MM_STAMMDATEN_DRS s on s.material = v.materialnr
 left outer join (
@@ -19,5 +20,5 @@ left outer join (
         where c.BUCHUNGSDATUM > (trunc(sysdate, 'MM'))- interval '25' month 
         group by c.MATERIALNUMMER, TRUNC(TO_DATE(c.BUCHUNGSDATUM),'MM')
 )k on k.materialnummer = v.materialnr and v.month_year = k.matchdate
-where v.MONTH_YEAR > (trunc(sysdate, 'MM'))- interval '25' month and v.MONTH_YEAR <= (trunc(sysdate, 'MM')) and s.mart in ('CFP') 
+where v.MONTH_YEAR > (trunc(sysdate, 'MM'))- interval '25' month and v.MONTH_YEAR <= (trunc(sysdate, 'MM')) and s.mart in ('CFP','3CFP') 
 order by v.month_year DESC
