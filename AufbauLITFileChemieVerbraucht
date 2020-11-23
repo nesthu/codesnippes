@@ -7,7 +7,10 @@ s.einheit_meldebestand as Unit,
 TO_NUMBER(REPLACE(SUBSTR(RTRIM(REGEXP_SUBSTR(s.MATERIALKURZTEXTDE, '[0-9]{1,4}[.|,]?([0-9]{1,4})?(K|L|m)', 1, 1, 'i'), '_ )'),0,length(RTRIM(REGEXP_SUBSTR(s.MATERIALKURZTEXTDE, '[0-9]{1,4}[.|,]?([0-9]{1,4})?(K|L|m)', 1, 1, 'i'), '_ )'))-1), '.', ',')) AS UNIT_SIZE,
 k.WERT_EUR as Value_EUR,
 v."CHANGE_IN_STOCK"/TO_NUMBER(REPLACE(SUBSTR(RTRIM(REGEXP_SUBSTR(s.MATERIALKURZTEXTDE, '[0-9]{1,4}[.|,]?([0-9]{1,4})?(K|L|m)', 1, 1, 'i'), '_ )'),0,length(RTRIM(REGEXP_SUBSTR(s.MATERIALKURZTEXTDE, '[0-9]{1,4}[.|,]?([0-9]{1,4})?(K|L|m)', 1, 1, 'i'), '_ )'))-1), '.', ',')) as Unit_Usage,
-s.mart
+case
+    when SUBSTR(s.mart,1,1) = '3' then '300mm' 
+    else '200mm'
+end as Wafer_Size
 from MM_ZHMDMAVL_DRS v
 left outer join MM_STAMMDATEN_DRS s on s.material = v.materialnr
 left outer join (
