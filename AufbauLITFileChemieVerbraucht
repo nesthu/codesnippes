@@ -7,7 +7,11 @@ s.einheit_meldebestand as Unit,
 --REGEXP_SUBSTR(s.MATERIALKURZTEXTDE, '(_)[0-9]{1,4}[.|,]?([0-9]{1,4})?(K|L|m|k)') as Test,  --Regexp String check
 TO_NUMBER(Replace(REPLACE(SUBSTR(RTRIM(REGEXP_SUBSTR(s.MATERIALKURZTEXTDE, '(_)[0-9]{1,4}[.|,]?([0-9]{1,4})?(K|L|m|k)', 1, 1, 'i'), '_ )'),0,length(RTRIM(REGEXP_SUBSTR(s.MATERIALKURZTEXTDE, '(_)[0-9]{1,4}[.|,]?([0-9]{1,4})?(K|L|m|k)', 1, 1, 'i'), '_ )'))-1), '.', ','),'_','')) AS UNIT_SIZE,
 k.WERT_EUR as Value_EUR,
-v."CHANGE_IN_STOCK"/TO_NUMBER(Replace(REPLACE(SUBSTR(RTRIM(REGEXP_SUBSTR(s.MATERIALKURZTEXTDE, '(_)[0-9]{1,4}[.|,]?([0-9]{1,4})?(K|L|m|k)', 1, 1, 'i'), '_ )'),0,length(RTRIM(REGEXP_SUBSTR(s.MATERIALKURZTEXTDE, '(_)[0-9]{1,4}[.|,]?([0-9]{1,4})?(K|L|m|k)', 1, 1, 'i'), '_ )'))-1), '.', ','),'_','')) as Unit_Usage,
+case
+    when v."CHANGE_IN_STOCK"/TO_NUMBER(Replace(REPLACE(SUBSTR(RTRIM(REGEXP_SUBSTR(s.MATERIALKURZTEXTDE, '(_)[0-9]{1,4}[.|,]?([0-9]{1,4})?(K|L|m|k)', 1, 1, 'i'), '_ )'),0,length(RTRIM(REGEXP_SUBSTR(s.MATERIALKURZTEXTDE, '(_)[0-9]{1,4}[.|,]?([0-9]{1,4})?(K|L|m|k)', 1, 1, 'i'), '_ )'))-1), '.', ','),'_','')) < 1 
+    then (v."CHANGE_IN_STOCK"/TO_NUMBER(Replace(REPLACE(SUBSTR(RTRIM(REGEXP_SUBSTR(s.MATERIALKURZTEXTDE, '(_)[0-9]{1,4}[.|,]?([0-9]{1,4})?(K|L|m|k)', 1, 1, 'i'), '_ )'),0,length(RTRIM(REGEXP_SUBSTR(s.MATERIALKURZTEXTDE, '(_)[0-9]{1,4}[.|,]?([0-9]{1,4})?(K|L|m|k)', 1, 1, 'i'), '_ )'))-1), '.', ','),'_',''))) *1000
+    else v."CHANGE_IN_STOCK"/TO_NUMBER(Replace(REPLACE(SUBSTR(RTRIM(REGEXP_SUBSTR(s.MATERIALKURZTEXTDE, '(_)[0-9]{1,4}[.|,]?([0-9]{1,4})?(K|L|m|k)', 1, 1, 'i'), '_ )'),0,length(RTRIM(REGEXP_SUBSTR(s.MATERIALKURZTEXTDE, '(_)[0-9]{1,4}[.|,]?([0-9]{1,4})?(K|L|m|k)', 1, 1, 'i'), '_ )'))-1), '.', ','),'_',''))   
+end as Unit_Usage,
 case
     when SUBSTR(s.mart,1,1) = '3' then '300mm' 
     else '200mm'
