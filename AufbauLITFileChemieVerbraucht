@@ -1,21 +1,18 @@
 select 
-v."MATERIALNR" as Material,
-s.MATERIALKURZTEXTDE as Description,
-v."MONTH_YEAR" as "Datum",
-v."CHANGE_IN_STOCK" as consumption,
-s.einheit_meldebestand as Unit,
---REGEXP_SUBSTR(s.MATERIALKURZTEXTDE, '(_)[0-9]{1,4}[.|,]?([0-9]{1,4})?(K|L|m|k)') as Test,  --Regexp String check
-TO_NUMBER(Replace(REPLACE(SUBSTR(RTRIM(REGEXP_SUBSTR(s.MATERIALKURZTEXTDE, '(_)[0-9]{1,4}[.|,]?([0-9]{1,4})?(K|L|m|k)', 1, 1, 'i'), '_ )'),0,length(RTRIM(REGEXP_SUBSTR(s.MATERIALKURZTEXTDE, '(_)[0-9]{1,4}[.|,]?([0-9]{1,4})?(K|L|m|k)', 1, 1, 'i'), '_ )'))-1), '.', ','),'_','')) AS UNIT_SIZE,
-k.WERT_EUR as Value_EUR,
-case
-    when v."CHANGE_IN_STOCK"/TO_NUMBER(Replace(REPLACE(SUBSTR(RTRIM(REGEXP_SUBSTR(s.MATERIALKURZTEXTDE, '(_)[0-9]{1,4}[.|,]?([0-9]{1,4})?(K|L|m|k)', 1, 1, 'i'), '_ )'),0,length(RTRIM(REGEXP_SUBSTR(s.MATERIALKURZTEXTDE, '(_)[0-9]{1,4}[.|,]?([0-9]{1,4})?(K|L|m|k)', 1, 1, 'i'), '_ )'))-1), '.', ','),'_','')) < 1 
-    then (v."CHANGE_IN_STOCK"/TO_NUMBER(Replace(REPLACE(SUBSTR(RTRIM(REGEXP_SUBSTR(s.MATERIALKURZTEXTDE, '(_)[0-9]{1,4}[.|,]?([0-9]{1,4})?(K|L|m|k)', 1, 1, 'i'), '_ )'),0,length(RTRIM(REGEXP_SUBSTR(s.MATERIALKURZTEXTDE, '(_)[0-9]{1,4}[.|,]?([0-9]{1,4})?(K|L|m|k)', 1, 1, 'i'), '_ )'))-1), '.', ','),'_',''))) *1000
-    else v."CHANGE_IN_STOCK"/TO_NUMBER(Replace(REPLACE(SUBSTR(RTRIM(REGEXP_SUBSTR(s.MATERIALKURZTEXTDE, '(_)[0-9]{1,4}[.|,]?([0-9]{1,4})?(K|L|m|k)', 1, 1, 'i'), '_ )'),0,length(RTRIM(REGEXP_SUBSTR(s.MATERIALKURZTEXTDE, '(_)[0-9]{1,4}[.|,]?([0-9]{1,4})?(K|L|m|k)', 1, 1, 'i'), '_ )'))-1), '.', ','),'_',''))   
-end as Unit_Usage,
-case
-    when SUBSTR(s.mart,1,1) = '3' then '300mm' 
-    else '200mm'
-end as Wafer_Size
+    v."MATERIALNR" as Material,
+    s.MATERIALKURZTEXTDE as Description,
+    v."MONTH_YEAR" as "Datum",
+    k.MENGE_ME as consumption,
+    s.einheit_meldebestand as Unit,
+    --REGEXP_SUBSTR(s.MATERIALKURZTEXTDE, '(_)[0-9]{1,4}[.|,]?([0-9]{1,4})?(K|L|m|k)') as Test,  --Regexp String check
+    TO_NUMBER(Replace(REPLACE(SUBSTR(RTRIM(REGEXP_SUBSTR(s.MATERIALKURZTEXTDE, '(_)[0-9]{1,4}[.|,]?([0-9]{1,4})?(K|L|m|k)', 1, 1, 'i'), '_ )'),0,length(RTRIM(REGEXP_SUBSTR(s.MATERIALKURZTEXTDE, '(_)[0-9]{1,4}[.|,]?([0-9]{1,4})?(K|L|m|k)', 1, 1, 'i'), '_ )'))-1), '.', ','),'_','')) AS UNIT_SIZE,
+    k.WERT_EUR as Value_EUR,
+    case
+        when k.MENGE_ME/TO_NUMBER(Replace(REPLACE(SUBSTR(RTRIM(REGEXP_SUBSTR(s.MATERIALKURZTEXTDE, '(_)[0-9]{1,4}[.|,]?([0-9]{1,4})?(K|L|m|k)', 1, 1, 'i'), '_ )'),0,length(RTRIM(REGEXP_SUBSTR(s.MATERIALKURZTEXTDE, '(_)[0-9]{1,4}[.|,]?([0-9]{1,4})?(K|L|m|k)', 1, 1, 'i'), '_ )'))-1), '.', ','),'_','')) < 1 
+        then (k.MENGE_ME/TO_NUMBER(Replace(REPLACE(SUBSTR(RTRIM(REGEXP_SUBSTR(s.MATERIALKURZTEXTDE, '(_)[0-9]{1,4}[.|,]?([0-9]{1,4})?(K|L|m|k)', 1, 1, 'i'), '_ )'),0,length(RTRIM(REGEXP_SUBSTR(s.MATERIALKURZTEXTDE, '(_)[0-9]{1,4}[.|,]?([0-9]{1,4})?(K|L|m|k)', 1, 1, 'i'), '_ )'))-1), '.', ','),'_',''))) *1000
+        else k.MENGE_ME/TO_NUMBER(Replace(REPLACE(SUBSTR(RTRIM(REGEXP_SUBSTR(s.MATERIALKURZTEXTDE, '(_)[0-9]{1,4}[.|,]?([0-9]{1,4})?(K|L|m|k)', 1, 1, 'i'), '_ )'),0,length(RTRIM(REGEXP_SUBSTR(s.MATERIALKURZTEXTDE, '(_)[0-9]{1,4}[.|,]?([0-9]{1,4})?(K|L|m|k)', 1, 1, 'i'), '_ )'))-1), '.', ','),'_',''))   
+    end as Unit_Usage,
+    k.KOSTENSTELLE
 from MM_ZHMDMAVL_DRS v
 left outer join MM_STAMMDATEN_DRS s on s.material = v.materialnr
 left outer join (
@@ -23,10 +20,12 @@ left outer join (
         sum(c.WERT_EUR) as WERT_EUR,
         TRUNC(TO_DATE(c.BUCHUNGSDATUM),'MM') as MatchDate,
         c.MATERIALNUMMER,
-        sum(c.MENGE_ME) as MENGE_ME
+        sum(c.MENGE_ME) as MENGE_ME,
+        c.KOSTENSTELLE
         from pms_data_admin.V_SAP_COST_SUM_ALL@ drs11oc.drs.infineon.com c
         where c.BUCHUNGSDATUM > (trunc(sysdate, 'MM'))- interval '25' month 
-        group by c.MATERIALNUMMER, TRUNC(TO_DATE(c.BUCHUNGSDATUM),'MM')
+        group by c.MATERIALNUMMER, TRUNC(TO_DATE(c.BUCHUNGSDATUM),'MM'),c.KOSTENSTELLE
 )k on k.materialnummer = v.materialnr and v.month_year = k.matchdate
 where v.MONTH_YEAR > (trunc(sysdate, 'MM'))- interval '25' month and v.MONTH_YEAR <= (trunc(sysdate, 'MM')) and s.mart in ('CFP','3CFP') 
 order by v.month_year DESC
+-- 1534 ohne Kostenstelle Vorversion
