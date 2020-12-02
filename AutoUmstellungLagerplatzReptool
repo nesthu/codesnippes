@@ -1,13 +1,21 @@
-select 
-to_char(ra.nummer) as REPNUMMER,
-ra.status,
-ra.lagerplatz,
-sap.chargennummer
-from MM_TOOLS_REP_ALLG ra
-left outer join (
-    select materialnummer,chargennummer
-        from mm_mseg_matbeleg_12m_drs
-        where materialnummer = 'REPARATURTEIL' 
-        group by materialnummer, chargennummer
-        )sap on sap.chargennummer = to_char(ra.nummer)
-where ra.lagerplatz is null and ra.status = 8 and sap.chargennummer is not null
+update MM_TOOLS_REP_ALLG_BK ra
+set ra.lagerplatz = 'VZDO'
+where exists ( select
+                q.REPNUMMER
+            from(
+                select 
+                to_char(rb.nummer) as REPNUMMER,
+                rb.status,
+                rb.lagerplatz,
+                sap.chargennummer
+                from MM_TOOLS_REP_ALLG_BK rb
+                left outer join (
+                    select materialnummer,chargennummer
+                        from mm_mseg_matbeleg_12m_drs
+                        where materialnummer = 'REPARATURTEIL' 
+                        group by materialnummer, chargennummer
+                        )sap on sap.chargennummer = to_char(rb.nummer)
+                where rb.lagerplatz is null  and sap.chargennummer is not null
+                ) q
+                
+    where ra.nummer = q.REPNUMMER);
