@@ -1,0 +1,12 @@
+select DISTINCT
+rh.nummer,
+rh.systemexperte,
+rh.anlage,
+trim(rh.materialnummer),
+rh.partnummer,
+rh.menge,
+rh.wann_erstellt,
+ra.rep_firma
+from mm_tools_rep_allg_history rh
+left outer join MM_TOOLS_REP_ALLG ra on ra.nummer = rh.nummer and ra.rep_firma = '849'
+where rh.rep_firma_knr = '10215' and rh.department_ersteller  like ('%PVD%') and ra.rep_firma = '849'
