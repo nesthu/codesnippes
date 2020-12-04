@@ -4,6 +4,7 @@ rh.systemexperte,
 rh.anlage,
 trim(rh.materialnummer),
 rh.partnummer,
+ra.seriennummer,
 rh.menge,
 rh.wann_erstellt,
 ra.rep_firma
