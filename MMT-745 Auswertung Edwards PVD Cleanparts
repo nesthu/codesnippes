@@ -2,7 +2,7 @@ select DISTINCT
 rh.nummer,
 rh.systemexperte,
 rh.anlage,
-trim(rh.materialnummer),
+rh.materialnummer,
 rh.partnummer,
 ra.seriennummer,
 rh.menge,
