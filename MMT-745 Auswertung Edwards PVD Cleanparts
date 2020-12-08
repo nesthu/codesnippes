@@ -10,4 +10,7 @@ rh.wann_erstellt,
 ra.rep_firma
 from mm_tools_rep_allg_history rh
 left outer join MM_TOOLS_REP_ALLG ra on ra.nummer = rh.nummer and ra.rep_firma = '849'
-where rh.rep_firma_knr = '10215' and rh.department_ersteller  like ('%PVD%') and ra.rep_firma = '849'
+where rh.rep_firma_knr = '10215' and rh.department_ersteller  like ('%PVD%') and ra.rep_firma = '849' 
+and TRUNC(TO_DATE(to_Date(TO_CHAR (rh.wann_erstellt, 'DD.MON.YYYY'))),'MM') = TRUNC(TO_DATE(to_Date(TO_CHAR (to_Date(TO_CHAR (add_months( sysdate, -1 ), 'DD.MON.YYYY')), 'DD.MON.YYYY'))),'MM')
+--TRUNC(TO_DATE(to_Date(TO_CHAR (rh.wann_erstellt, 'DD.MON.YYYY'))),'MM'),  -- Erstell Monat = Monats erster.
+--TRUNC(TO_DATE(to_Date(TO_CHAR (to_Date(TO_CHAR (add_months( sysdate, -1 ), 'DD.MON.YYYY')), 'DD.MON.YYYY'))),'MM'), -- Monatserster des Vormonats
