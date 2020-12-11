@@ -1,0 +1,5 @@
+select benachrichtigender, count(*)
+from mm_tools_down_order
+where to_Date(TO_CHAR ("DATUM", 'DD.MON.YYYY')) > '11.12.19'
+        and lieferant = 591
+group by benachrichtigender
