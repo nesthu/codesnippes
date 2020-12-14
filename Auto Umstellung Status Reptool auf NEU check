@@ -1,0 +1,6 @@
+select*
+from MM_tools_rep_allg
+--set status = 9  -- 9 Status NEU
+where 
+    status = 8   -- Status Teil erfasst
+    and  lagerplatz is not null;
