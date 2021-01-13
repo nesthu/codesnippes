@@ -1,0 +1,20 @@
+select 
+        LINKED_PN as "Supplier PN",
+        case
+            when LOCATION  = 'VIH' then MATERIAL_DESCRIPTION_DE
+            else ''
+            end as "Description",
+        LINKED_MATERIAL as "SAP Material No",
+        PLANNED_DELIVERY_TIME as "Lead-Time",
+        "12M_CONSUMPTION" as "Usage",
+        case
+            when LOCATION = 'DRS' then REORDER_POINT
+            else 0
+            end as "TSL DRS",
+        case
+            when LOCATION = 'VIH' then REORDER_POINT
+            else 0
+            end as "TSL VIH",
+        NET_PRICE_IN_EUR as " Net price per pc in EUR",
+        STOCK_VALUE as "Current Stock Value EUR"
+from CHECK_MP_300MM
