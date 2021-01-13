@@ -1,0 +1,33 @@
+Select 
+sm."Supplier PN",
+sm."Description",
+sm."SAP Material No",
+sm."Lead-Time",
+sm."Usage",
+sm."TSL DRS",
+sm."TSL VIH",
+sm." Net price per pc in EUR",
+sm."Current Stock Value EUR"
+    from        (select 
+                ck.LINKED_PN as "Supplier PN",
+                max(case
+                    when ck.LOCATION  = 'VIH' then ck.MATERIAL_DESCRIPTION_DE
+                    else ''
+                    end) as "Description",
+                max(ck.LINKED_MATERIAL) as "SAP Material No",
+                min(ck.PLANNED_DELIVERY_TIME) as "Lead-Time",
+                sum(ck."12M_CONSUMPTION") as "Usage",
+                max(case
+                    when ck.LOCATION = 'DRS' then ck.REORDER_POINT
+                    else 0
+                    end) as "TSL DRS",
+                Max(case
+                    when ck.LOCATION = 'VIH' then ck.REORDER_POINT
+                    else 0
+                    end) as "TSL VIH",
+                min(ck.NET_PRICE_IN_EUR) as " Net price per pc in EUR",
+                sum(ck.STOCK_VALUE) as "Current Stock Value EUR"
+        from CHECK_MP_300MM ck
+        Group by ck.LINKED_PN 
+)sm
+where sm."SAP Material No" <> 'NO' and sm."Current Stock Value EUR" > 2000 and sm."Lead-Time" < 60 and sm."Usage" <= 2
