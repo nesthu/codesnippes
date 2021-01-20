@@ -1,0 +1,4 @@
+select length(BELEGNUMMER),
+Belegnummer
+from mm_order_drs_load
+order by length(BELEGNUMMER) DESC
