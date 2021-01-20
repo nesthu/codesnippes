@@ -1,0 +1,12 @@
+select 
+                kl.anlage
+                from MM_KLASSE_MAT_VIH_EXP kl
+    left outer join (
+                select 
+                    sd.material,
+                    sd.LÖSCHKENNZEICHEN_WK
+                from MM_STAMMDATEN_VIH sd
+                ) s on s.material = kl.objekt
+where kl.wafer_durchmesser like ('%12%') and s.LÖSCHKENNZEICHEN_WK is null and Anlage is not null
+Group by kl.anlage
+order by kl.anlage desc
