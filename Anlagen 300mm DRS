@@ -1,6 +1,7 @@
 select 
     --kl.objekt,
-    kl.anlage
+    kl.anlage,
+    'DRS' as Standort
 from MM_KLASSE_MAT_DRS_EXP kl
 left outer join (
                 select
