@@ -11,4 +11,5 @@ BESTÄTIGTERLT,
 AUSGEGEBEN_AN,
 LAST_UPDATE
 from MM_TOOLS_DOWN_LIEFERUNG_bk
-where downnr = '521657'
+where downnr = '521687'
+order by last_update DESC
