@@ -1,0 +1,33 @@
+select  ANLAGE
+from(
+select 
+    --kl.objekt,
+    kl.anlage
+    --'DRS' as Standort
+from MM_KLASSE_MAT_DRS_EXP kl
+left outer join (
+                select
+                     sd.material,
+                     sd.location,
+                     sd.mm_group,
+                     '300mm' as FILTER
+                from MM_STAMMDATEN_ALLE_WERKE_EN sd
+                where location = 'DRS' and substr(material_type,1,1) = '3' and deletion_flag_plant is null
+                )s on s.material = kl.objekt
+where s.Filter = '300mm' and kl.anlage is not null
+group by kl.anlage
+union
+select 
+                kl.anlage
+                --'VIH' as Standort
+                from MM_KLASSE_MAT_VIH_EXP kl
+    left outer join (
+                select 
+                    sd.material,
+                    sd.LÖSCHKENNZEICHEN_WK
+                from MM_STAMMDATEN_VIH sd
+                ) s on s.material = kl.objekt
+where kl.wafer_durchmesser like ('%12%') and s.LÖSCHKENNZEICHEN_WK is null and Anlage is not null
+Group by kl.anlage
+)
+group by ANLAGE
