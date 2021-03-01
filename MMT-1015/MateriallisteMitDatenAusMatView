@@ -1,23 +1,27 @@
 select 
 GRW.Site,
-grw.material,
+trim(grw.material) as MATERIAL,
 mv.MATERIALKURZTEXTZ1,
 mv.DISPOMERKMAL,
 mv.WERKSSPEZ_MATERIALSTATUS,
 mv.LIEFERANTNAME,
 mv."Lieferant Materialnummer",
 mv.OEM_LIEFERANT_AKTUELL as OEM_LIEFERANT,
+mv.OEM_PN_NR as OEM_PN,
 mv.MELDEBESTAND,
 mv.BESTAND_ALL,
 mv.GESAMT as "Verbrauch 12 Monate",
-mv.CONSUMPTION_EUR_12M
+mv.CONSUMPTION_EUR_12M,
+hms.material,
+hms.location
 from (
         select 
             'DRS' as Site,
-            zp.material
+            trim(zp.material) as MATERIAL
         from mm_zpmmsl_mat_consump_drs_view zp
         left outer Join mmt1015_anlage_mnt_group mnt on substr(mnt.equipment,1,9) = SUBSTR(zp.EQUIPMENT,1,9)
         where zp.equipment is not null and mnt.maint_group is not null and substr(zp.material,1,3) <> 'PO-'
         group by zp.material
         ) GRW
 left outer Join MM_MATERIAL_VIEW_DRS mv on MV.MATERIAL = GRW.material
+left outer join hlp_material_zu_pn_search hms on mv.OEM_PN_NR like ('%' ||hms.linked_pn|| '%')
