@@ -1,0 +1,24 @@
+select 
+GRW.Site,
+trim(grw.material) as MATERIAL,
+mv.MATERIALKURZTEXTDE,
+mv.DISPOMERKMAL,
+mv.WERKSSPEZ_MATERIALSTATUS,
+mv.LIEFERANTNAME,
+mv."Lieferant Materialnummer",
+mv.OEM_LIEFERANT_AKTUELL as OEM_LIEFERANT,
+mv.OEM_PN_NR as OEM_PN,
+mv.MELDEBESTAND,
+mv.BESTAND_ALL,
+mv.GESAMT as "Verbrauch 12 Monate",
+mv.CONSUMPTION_EUR_12M
+from (
+        select 
+            'VIH' as Site,
+            trim(zp.material) as MATERIAL
+        from mm_zpmmsl_mat_consump_vih_view zp
+        left outer Join mmt1015_anlage_mnt_group mnt on SUBSTR(mnt.equipment_mainframe,1,6) = SUBSTR(zp.EQUIPMENT,-6,6)
+        where  substr(zp.material,1,3) <> 'PO-'and substr(zp.material,1,1) <> '9' -- mnt.equipment_mainframe is not null --and mnt.maint_group is not null -- and
+        group by zp.material
+        ) GRW
+left outer Join MM_MATERIAL_VIEW_vih mv on MV.MATERIAL = GRW.material
