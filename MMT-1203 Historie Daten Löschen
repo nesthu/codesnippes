@@ -1,3 +1,1 @@
-delete
-from MM_BESTAND_HISTORIE_ALLE_WERKE
-where CAST(last_update AS DATE) < '22.04.2020'
+delete FROM MM_BESTAND_HISTORIE_ALLE_WERKE WHERE LAST_UPDATE <= (current_timestamp - interval '1' year)
