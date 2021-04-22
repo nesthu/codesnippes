@@ -1,0 +1,3 @@
+delete
+from MM_BESTAND_HISTORIE_ALLE_WERKE
+where CAST(last_update AS DATE) < '22.04.2020'
