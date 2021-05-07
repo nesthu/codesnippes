@@ -2,6 +2,8 @@ select distinct
  trim(re.material)as Material,
  mb.MATERIALBELEG,
  mb.BEWEGUNGSART,
+ mb.MENGE,
+ mb.BME,
  mb.SOLL_HABEN_KENNZEICHEN,
  mb.WARENEMPFAENGER,
  mb.BUCHUNGSDATUM_BELEG
