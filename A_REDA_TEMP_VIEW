@@ -1,0 +1,10 @@
+select distinct
+ trim(re.material)as Material,
+ mb.MATERIALBELEG,
+ mb.BEWEGUNGSART,
+ mb.SOLL_HABEN_KENNZEICHEN,
+ mb.WARENEMPFAENGER,
+ mb.BUCHUNGSDATUM_BELEG
+from a_reda_temp re
+left outer join MM_MSEG_MATBELEG_12M_DRS_VIEW mb on trim(re.material) = mb.MATERIALNUMMER
+where mb.SOLL_HABEN_KENNZEICHEN = 'H'
