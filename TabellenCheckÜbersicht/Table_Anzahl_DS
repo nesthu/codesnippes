@@ -1,0 +1,5 @@
+select 'MM_MATERIAL_VIEW_DRS' as TABELLE ,count(*) as ANZAHL_DS ,max(last_update)AS LAST_UPDATE
+from MM_MATERIAL_VIEW_DRS
+union
+select 'MM_DISPONENTEN_DRS' as TABELLE ,count(*) as ANZAHL_DS ,max(last_update)AS LAST_UPDATE
+from MM_DISPONENTEN_DRS
