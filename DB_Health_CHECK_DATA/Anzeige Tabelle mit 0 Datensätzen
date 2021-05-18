@@ -1,0 +1,3 @@
+select *
+from MM_DB_TABLES_ANZAHL_DS
+where anzahl_ds = 0
