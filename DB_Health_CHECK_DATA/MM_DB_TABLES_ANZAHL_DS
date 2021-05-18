@@ -66,3 +66,7 @@ union select 'MM_ZHMDMAVL_KLM' as TABELLE ,count(*) as ANZAHL_DS  from MM_ZHMDMA
 union select 'MM_ZHMDMAVL_RBG' as TABELLE ,count(*) as ANZAHL_DS  from MM_ZHMDMAVL_RBG
 union select 'MM_ZHMDMAVL_VIH' as TABELLE ,count(*) as ANZAHL_DS  from MM_ZHMDMAVL_VIH
 union select 'MM_ZPMMSL_MAT_CONSUMP_DRS' as TABELLE ,count(*) as ANZAHL_DS  from MM_ZPMMSL_MAT_CONSUMP_DRS
+union select 'MM_INFOSATZ_DRS' as TABELLE ,count(*) as ANZAHL_DS  from MM_INFOSATZ_DRS
+union select 'MM_INFOSATZ_KLM' as TABELLE ,count(*) as ANZAHL_DS  from MM_INFOSATZ_KLM
+union select 'MM_INFOSATZ_RBG' as TABELLE ,count(*) as ANZAHL_DS  from MM_INFOSATZ_RBG
+union select 'MM_INFOSATZ_VIH' as TABELLE ,count(*) as ANZAHL_DS  from MM_INFOSATZ_VIH
