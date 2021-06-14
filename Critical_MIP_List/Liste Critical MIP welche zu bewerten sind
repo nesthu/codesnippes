@@ -1,0 +1,66 @@
+select * from (
+        select  LOCATION,
+                MATERIAL,
+                MATERIAL_GROUP,
+                case
+                    when MATERIAL_GROUP in('NBEW','UBEW') then 0 else 1 
+                end as MG_Indicator,
+                MRP_CONTROLLER,
+                case 
+                    when MRP_CONTROLLER is null then 0 else 1
+                end as MRP_indicator,
+                DELETION_FLAG_PLANT,
+                case
+                    when DELETION_FLAG_PLANT is null then 1 else 0
+                end as DF_Indicator,
+                MRP_TYPE,
+                case
+                    when MRP_TYPE = ('ND') then 0 else 1
+                end as MRPT_Indicator,
+                PLANT_SPECIFIC_STATUS,
+                case 
+                    when PLANT_SPECIFIC_STATUS in ('S2','S3','G','02') then 0 else 1
+                end as PSS_Indicator,
+                MATERIAL_TYPE
+        from MM_STAMMDATEN_ALLE_WERKE_EN
+        where MATERIAL_GROUP in ('A0201',
+                                'A0202',
+                                'A0203',
+                                'A0299',
+                                'A0301',
+                                'A0302',
+                                'A0303',
+                                'A0399',
+                                'A0401',
+                                'A0402',
+                                'A0403',
+                                'A0404',
+                                'A0405',
+                                'A0499',
+                                'A0501',
+                                'A0502',
+                                'A0503',
+                                'A0504',
+                                'A0505',
+                                'A0506',
+                                'A0599',
+                                'A0601',
+                                'A0602',
+                                'A0699',
+                                'A0701',
+                                'A0702',
+                                'A0703',
+                                'A0799',
+                                'A0801',
+                                'A0899',
+                                'B0801',
+                                'H0299',
+                                'H0399')     
+                            
+                                )
+where 
+    MG_Indicator =1 
+    and MRP_indicator =1 
+    and DF_Indicator= 1 
+    and MRPT_Indicator =1 
+    and PSS_Indicator =1
