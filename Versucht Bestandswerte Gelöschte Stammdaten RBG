@@ -1,0 +1,10 @@
+select 
+m.MATERIAL,
+m.DATUM,
+s.BESTANDSWERT,
+s.MM_GROUP
+from (select material,max(DATUM)as Datum
+        from MM_MATDISPLUS_HISTORIE_RBG
+        where LÖSCHKENNZEICHEN_WK is null
+        Group by material) m
+left outer join MM_MATDISPLUS_HISTORIE_RBG s on m.MATERIAL =s.MATERIAL and m.DATUM = s.DATUM
