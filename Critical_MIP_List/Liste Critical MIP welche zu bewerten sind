@@ -57,4 +57,4 @@ where
     and DF_Indicator= 1 
     and MRPT_Indicator =1 
     and PSS_Indicator =1
-    
+-- MRP noch entfernen aus ishare V2  MRP out of scope) mit einbauen 
