@@ -57,4 +57,5 @@ where
     and DF_Indicator= 1 
     and MRPT_Indicator =1 
     and PSS_Indicator =1
+    and LOCATION || MRP_CONTROLLER not in ('DRSRE6','DRSRE7','KLMK38','KLMK40','RBGD03','RBGD05','RBGE11','RBGE12','RBGR19','RBGR4','RBGR7','VIHD23','VIHD43','VIHD52')
 -- MRP noch entfernen aus ishare V2  MRP out of scope) mit einbauen 
