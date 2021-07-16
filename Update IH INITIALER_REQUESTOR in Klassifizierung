@@ -1,0 +1,5 @@
+update mm_klasse_mat_drs_exp
+set 
+INITIALER_REQUESTOR = 'JÖRG BULLMANN'
+where objekt = 'K-P-34-01-0068760' and INITIALER_REQUESTOR = 'THOMAS KÜNZELMANN';
+commit;
