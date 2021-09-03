@@ -1,0 +1,59 @@
+Select distinct 
+Material 
+from (
+-- Info Bewertungsklasse 3046 = NCONS  3035 = cons
+
+-- EPI 300  3046 
+select distinct material
+    from MM_ZPMMSL_MAT_CONSUMP_DRS_VIEW
+    where   equipment Like '%EPIP02-01%' or 
+            equipment Like '%EPIP02-02%' or 
+            equipment Like '%EPIP02-03%' or 
+            equipment Like '%EPIP02-04%' or 
+            equipment Like '%EPIP02-05%' or 
+            equipment Like '%EPIP02-06%' or 
+            equipment Like '%EPIP02-07%'         
+union
+-- EPI 200
+select distinct material
+    from MM_ZPMMSL_MAT_CONSUMP_DRS_VIEW
+    where   equipment Like '%SPU004-04%' and Bewertungsklasse = '3046' or 
+            equipment Like '%OFE024-01%' and Bewertungsklasse = '3046' or 
+            equipment Like '%OFE024-03%' and Bewertungsklasse = '3046' or 
+            equipment Like '%OFE024-02%' and Bewertungsklasse = '3046' or 
+            equipment Like '%EPI001-01%' and Bewertungsklasse = '3046' or 
+            equipment Like '%EPI001-02%' and Bewertungsklasse = '3046' or 
+            equipment Like '%EPI002-01%' and Bewertungsklasse = '3046' or
+            equipment Like '%EPI002-02%' and Bewertungsklasse = '3046' or
+            equipment Like '%EPI003-01%' and Bewertungsklasse = '3046'
+union
+-- CMP
+select distinct material
+    from MM_ZPMMSL_MAT_CONSUMP_DRS_VIEW
+    where   equipment Like '%CMP074-01%'  or 
+            equipment Like '%CMP074-02%' 
+                    
+union
+-- IMPL
+select material
+    from MM_ZPMMSL_MAT_CONSUMP_DRS_VIEW
+    where   equipment Like '%IMPP13-01%'  or 
+            equipment Like '%IMPP13-02%'  or 
+            equipment Like '%IMPP13-03%'  or 
+            equipment Like '%IMPP13-04%'  or 
+            equipment Like '%IMPP13-05%' 
+            
+union
+-- CVD/Etch
+select material
+    from MM_ZPMMSL_MAT_CONSUMP_DRS_VIEW
+    where   equipment Like '%CVDP01-03%' and Bewertungsklasse = '3046' or 
+            equipment Like '%CVDP12-02%' and Bewertungsklasse = '3046' or 
+            equipment Like '%CVDP12-01%' and Bewertungsklasse = '3046' or 
+            equipment Like '%CVDP01-02%' and Bewertungsklasse = '3046' or 
+            equipment Like '%CVDP01-01%' and Bewertungsklasse = '3046' or 
+            equipment Like '%ETCP80-01%' and Bewertungsklasse = '3046' or
+            equipment Like '%ETCP80-02%' and Bewertungsklasse = '3046' or
+            equipment Like '%CVDP12-03%' and Bewertungsklasse = '3046'
+)
+where Material is not null and Material not like '%PO-%'
