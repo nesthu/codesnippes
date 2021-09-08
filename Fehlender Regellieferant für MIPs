@@ -19,3 +19,4 @@ plant_speci_satus
 
 from  mm_material_view_all_en
 where material_group like '%A0%' and material_group not like '%A01%' and vendor_name is null
+-- missing regular vendor MIP.xls in historie
