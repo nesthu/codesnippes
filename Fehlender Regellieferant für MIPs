@@ -1,0 +1,21 @@
+select 
+location,
+material,
+description,
+MRP_TYPE, 
+MRP_CONTROLLER,
+reorder_point,
+mm_group,
+vendor_number,
+vendor_materialnummer,
+net_price_vendor,
+net_price_in_eur,
+picks,
+planned_delivery_time,
+price_unit,
+consumption_eur_12m,
+material_group,
+plant_speci_satus
+
+from  mm_material_view_all_en
+where material_group like '%A0%' and material_group not like '%A01%' and vendor_name is null
