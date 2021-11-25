@@ -1,0 +1,6 @@
+select *
+from MM_MATERIAL_VIEW_VIH
+where   mm_group = 'SPARE' 
+        and usagegroup <> 'usage' --and USAGEGROUP = 'noUsageEver'
+        and erstellt < '25.11.2019'
+-- erstellt Datum sollte noch mit beachtet werden, damit keine neu angelegten Materialien ohne Usage in die Liste kommen.
