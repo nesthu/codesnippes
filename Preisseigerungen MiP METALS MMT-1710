@@ -1,0 +1,60 @@
+select 
+mdh.LOCATION,
+mdh.MATERIAL,
+mdh.MATERIAL_GROUP,
+mdh.MATERIAL_DESCRIPTION_DE,
+case 
+    when mdh.MOV_AVG_PRICE = 0
+    then 0
+    else
+        round(mdh.STOCK_VALUE / mdh.MOV_AVG_PRICE,0) -- berechnet da Valued_Stock noch unbewertete Lagerplätze enthält
+end  as Stock,
+mdh.STOCK_VALUE,
+mdh.MOV_AVG_PRICE,
+sep.MOV_AVG_PRICE as ,
+mdh.LAST_UPDATE
+from MM_MATDISPLUS_HISTORIE_ALL_EN mdh
+left outer join (  --nur September Werte Join für Ausgangsvergleich
+                select 
+                mdh.LOCATION,
+                mdh.MATERIAL,
+                case 
+                    when mdh.MOV_AVG_PRICE = 0
+                    then 0
+                    else
+                        round(mdh.STOCK_VALUE / mdh.MOV_AVG_PRICE,0)  -- berechnet da Valued_Stock noch unbewertete Lagerplätze enthält
+                end as Stock,
+                mdh.STOCK_VALUE,
+                mdh.MOV_AVG_PRICE,
+                mdh.LAST_UPDATE
+                from MM_MATDISPLUS_HISTORIE_ALL_EN mdh
+                where mdh.mm_group in ('MiP','METALS') 
+                        and to_date(CAST(mdh.LAST_UPDATE AS DATE),'DD.MM.YY') > (TRUNC(sysdate, 'MM'))- interval '12' MONTH -- Festlegung 12 M damit nur 1x September dabei
+                        AND to_date(CAST(mdh.LAST_UPDATE AS DATE),'DD.MM.YY') <= (TRUNC(sysdate, 'MM'))
+                        and substr(to_date(CAST(mdh.LAST_UPDATE AS DATE),'DD.MM.YY'),0,6) = '01.09.' -- Festlegung nur Septemper Werte
+                        --and mdh.material = '8000130' 
+        ) sep on sep.material = mdh.material and sep.location = mdh.location
+where mdh.mm_group in ('MiP','METALS') --and mdh.material = '8000130' 
+order by mdh.LAST_UPDATE DESC
+
+
+
+--Bestandswert und Durchschnittpreis  letzter Monat
+select 
+                mdh.LOCATION,
+                mdh.MATERIAL,
+                case 
+                    when mdh.MOV_AVG_PRICE = 0
+                    then 0
+                    else
+                        round(mdh.STOCK_VALUE / mdh.MOV_AVG_PRICE,0)  -- berechnet da Valued_Stock noch unbewertete Lagerplätze enthält
+                end as Stock,
+                mdh.STOCK_VALUE,
+                mdh.MOV_AVG_PRICE,
+                to_date(CAST(mdh.LAST_UPDATE AS DATE)) as Test,
+                add_months(TRUNC(TO_DATE(CAST(LOCALTIMESTAMP AS DATE)),'MM'),-1)    as NEUESDATUM,
+                mdh.LAST_UPDATE
+                from MM_MATDISPLUS_HISTORIE_ALL_EN mdh
+                where mdh.mm_group in ('MiP','METALS') 
+                        --and to_date(CAST(mdh.LAST_UPDATE AS DATE)) = add_months(TRUNC(TO_DATE(CAST(LOCALTIMESTAMP AS DATE)),'MM'),-1) -- Festlegung nur Septemper Werte
+                        and mdh.material = '8000130' 
