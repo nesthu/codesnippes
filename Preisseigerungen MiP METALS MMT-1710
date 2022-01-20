@@ -11,7 +11,7 @@ case
 end  as Stock,
 mdh.STOCK_VALUE,
 mdh.MOV_AVG_PRICE,
-sep.MOV_AVG_PRICE as ,
+sep.MOV_AVG_PRICE as SEP_AVG_Price,
 mdh.LAST_UPDATE
 from MM_MATDISPLUS_HISTORIE_ALL_EN mdh
 left outer join (  --nur September Werte Join für Ausgangsvergleich
