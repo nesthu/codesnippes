@@ -58,3 +58,21 @@ select
                 where mdh.mm_group in ('MiP','METALS') 
                         --and to_date(CAST(mdh.LAST_UPDATE AS DATE)) = add_months(TRUNC(TO_DATE(CAST(LOCALTIMESTAMP AS DATE)),'MM'),-1) -- Festlegung nur Septemper Werte
                         and mdh.material = '8000130' 
+                        
+ ------------------------------------------------------------------------------
+ -- Main View für Materialliste in welche dann die Daten hinzugespielt werdne
+ ------------------------------------------------------------------------------
+ select 
+    sd.LOCATION,
+    sd.MATERIAL,
+    sd.MATERIAL_GROUP,
+    sd.MATERIAL_DESCRIPTION_DE as Material_Description,
+    sd.MATERIAL_TYPE,
+    sd.MRP_CONTROLLER,
+    sd."BASE UNIT OF MEASURE",
+    sd.mm_group
+from MM_STAMMDATEN_ALLE_WERKE_EN sd
+where sd.deletion_flag_plant is null
+        and sd.mm_group not in ('SPARE')  -- ausgelblendet da wegen manipuliertem gleitenden Preis nicht genutzt werden kann
+;
+------------------------------------------------------------------------
